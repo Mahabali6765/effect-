@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>⚔️ MAHABALI — ULTRA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ===== ANIMATED BACKGROUND PARTICLES ===== */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #05050b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* particle canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1050px;
+            width: 100%;
+            background: rgba(8, 8, 20, 0.75);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            padding: 36px 32px;
+            border: 1px solid rgba(0, 255, 195, 0.3);
+            box-shadow: 0 0 100px rgba(0, 255, 195, 0.08), inset 0 0 80px rgba(0, 255, 195, 0.02);
+            transition: 0.4s;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.96) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ===== HEADER WITH GLOW ===== */
+        .header {
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 20px;
+            margin-bottom: 28px;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #00ffc3, #00aaff, #aa66ff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradShift 4s ease infinite alternate;
+            text-shadow: 0 0 60px rgba(0, 255, 195, 0.15);
+        }
+
+        @keyframes gradShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .header h1 i {
+            background: linear-gradient(135deg, #ff3c7a, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 12px;
+        }
+
+        .header .sub {
+            color: #6a6a9a;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            font-weight: 300;
+            margin-top: 6px;
+            animation: pulseText 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseText {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* ===== BUTTON GRID (premium colors) ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+            gap: 18px;
+            margin: 20px 0 26px 0;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 22px;
+            padding: 20px 6px 16px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn i {
+            font-size: 1.9rem;
+            margin-bottom: 4px;
+            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
+        }
+
+        .btn .example {
+            font-size: 0.6rem;
+            opacity: 0.8;
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 3px 14px;
+            border-radius: 30px;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.08), 0 16px 40px rgba(0, 0, 0, 0.9);
+        }
+
+        .btn:active {
+            transform: scale(0.92);
+        }
+
+        /* individual gradients */
+        .btn-num {
+            background: linear-gradient(145deg, #0f2847, #091a30);
+            border-bottom: 4px solid #4a9eff;
+        }
+        .btn-num:hover {
+            background: linear-gradient(145deg, #1a3a66, #0c2440);
+        }
+
+        .btn-vehicle {
+            background: linear-gradient(145deg, #3d2415, #26160c);
+            border-bottom: 4px solid #e67e22;
+        }
+        .btn-vehicle:hover {
+            background: linear-gradient(145deg, #5a341e, #2f1a0e);
+        }
+
+        .btn-truecaller {
+            background: linear-gradient(145deg, #143333, #0a1f1f);
+            border-bottom: 4px solid #1abc9c;
+        }
+        .btn-truecaller:hover {
+            background: linear-gradient(145deg, #1e4a4a, #0f2a2a);
+        }
+
+        .btn-aadhar {
+            background: linear-gradient(145deg, #2e1430, #1a0c1c);
+            border-bottom: 4px solid #9b59b6;
+        }
+        .btn-aadhar:hover {
+            background: linear-gradient(145deg, #421e45, #241027);
+        }
+
+        .btn-ip {
+            background: linear-gradient(145deg, #14223a, #0a1424);
+            border-bottom: 4px solid #3498db;
+        }
+        .btn-ip:hover {
+            background: linear-gradient(145deg, #1e3354, #101c30);
+        }
+
+        .btn-ifsc {
+            background: linear-gradient(145deg, #2a2813, #18160a);
+            border-bottom: 4px solid #f1c40f;
+        }
+        .btn-ifsc:hover {
+            background: linear-gradient(145deg, #3f3c1a, #221f0d);
+        }
+
+        .btn-tg {
+            background: linear-gradient(145deg, #14223d, #0a1428);
+            border-bottom: 4px solid #5dade2;
+        }
+        .btn-tg:hover {
+            background: linear-gradient(145deg, #1e335a, #101c30);
+        }
+
+        .btn-pincode {
+            background: linear-gradient(145deg, #222222, #121212);
+            border-bottom: 4px solid #95a5a6;
+        }
+        .btn-pincode:hover {
+            background: linear-gradient(145deg, #363636, #1a1a1a);
+        }
+
+        .btn-email {
+            background: linear-gradient(145deg, #2a142a, #1a0c1a);
+            border-bottom: 4px solid #e74c8b;
+        }
+        .btn-email:hover {
+            background: linear-gradient(145deg, #3d1e3d, #241024);
+        }
+
+        .btn-pan {
+            background: linear-gradient(145deg, #2a1a14, #1a0e0a);
+            border-bottom: 4px solid #e67e22;
+        }
+        .btn-pan:hover {
+            background: linear-gradient(145deg, #3d261c, #24140c);
+        }
+
+        /* ===== INPUT ===== */
+        .input-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 8px 0 20px 0;
+        }
+
+        .input-area input {
+            flex: 2;
+            min-width: 200px;
+            background: rgba(8, 8, 20, 0.8);
+            border: 1px solid #2a2a50;
+            border-radius: 60px;
+            padding: 18px 26px;
+            color: #f0f0ff;
+            font-size: 1.05rem;
+            outline: none;
+            transition: 0.3s;
+            backdrop-filter: blur(8px);
+            letter-spacing: 0.5px;
+        }
+
+        .input-area input:focus {
+            border-color: #00ffc3;
+            box-shadow: 0 0 40px rgba(0, 255, 195, 0.12);
+        }
+
+        .input-area button {
+            background: linear-gradient(135deg, #00ffc3, #0088aa);
+            border: none;
+            border-radius: 60px;
+            padding: 18px 48px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #0a0a0f;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 0 40px rgba(0, 255, 195, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .input-area button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 70px rgba(0, 255, 195, 0.35);
+            background: linear-gradient(135deg, #66ffd6, #00aacc);
+        }
+
+        /* ===== RESULT WITH TYPING EFFECT ===== */
+        .result {
+            background: rgba(6, 6, 14, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid #1a1a34;
+            border-radius: 28px;
+            padding: 22px 26px;
+            margin-top: 22px;
+            color: #d0d0f0;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 450px;
+            overflow-y: auto;
+            line-height: 1.8;
+            font-family: 'Courier New', monospace;
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.9);
+            transition: 0.3s;
+        }
+
+        .result .label {
+            color: #4a4a7a;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #12122a;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result .label span {
+            color: #00ffc3;
+            font-weight: 700;
+        }
+
+        .result .error {
+            color: #ff5e7c;
+        }
+
+        .result .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: #00ffc3;
+            margin-left: 4px;
+            animation: blink 0.8s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* scroll */
+        .result::-webkit-scrollbar {
+            width: 4px;
+        }
+        .result::-webkit-scrollbar-track {
+            background: #06060e;
+        }
+        .result::-webkit-scrollbar-thumb {
+            background: #00ffc366;
+            border-radius: 10px;
+        }
+
+        /* ===== CREDIT ===== */
+        .credit {
+            text-align: center;
+            margin-top: 30px;
+            color: #3a3a5a;
+            font-size: 0.8rem;
+            border-top: 1px solid #111125;
+            padding-top: 20px;
+            letter-spacing: 2px;
+        }
+
+        .credit a {
+            color: #00ffc3;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .credit a:hover {
+            color: #66ffd6;
+            text-shadow: 0 0 20px rgba(0, 255, 195, 0.3);
+        }
+
+        .credit i {
+            color: #ff3c7a;
+        }
+
+        @media (max-width: 550px) {
+            .container { padding: 18px; }
+            .header h1 { font-size: 2.4rem; letter-spacing: 3px; }
+            .btn { font-size: 0.7rem; padding: 12px 4px; }
+            .btn i { font-size: 1.3rem; }
+            .input-area input { min-width: 120px; padding: 14px 18px; }
+            .input-area button { padding: 14px 24px; font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PARTICLE BACKGROUND ===== -->
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1><i class="fas fa-skull"></i> MAHABALI</h1>
+            <div class="sub">⚡ data intelligence · no limits ⚡</div>
+        </div>
+
+        <!-- BUTTON GRID -->
+        <div class="grid">
+            <div class="btn btn-num" data-key="Numberbot" data-example="9876543210">
+                <i class="fas fa-phone-alt"></i> /num
+                <span class="example">📞 9876543210</span>
+            </div>
+            <div class="btn btn-vehicle" data-key="Vehiclebot" data-example="BR06PE8167">
+                <i class="fas fa-car"></i> /vehicle
+                <span class="example">🚗 BR06PE8167</span>
+            </div>
+            <div class="btn btn-truecaller" data-key="Truecallerbot" data-example="9876543210">
+                <i class="fas fa-id-card"></i> /truecaller
+                <span class="example">📇 9876543210</span>
+            </div>
+            <div class="btn btn-aadhar" data-key="Aadharbot" data-example="123456789012">
+                <i class="fas fa-fingerprint"></i> /aadhar
+                <span class="example">🪪 123456789012</span>
+            </div>
+            <div class="btn btn-ip" data-key="IPbot" data-example="8.8.8.8">
+                <i class="fas fa-globe"></i> /ip
+                <span class="example">🌐 8.8.8.8</span>
+            </div>
+            <div class="btn btn-ifsc" data-key="IFSEbot" data-example="SBIN0001234">
+                <i class="fas fa-university"></i> /ifsc
+                <span class="example">🏦 SBIN0001234</span>
+            </div>
+            <div class="btn btn-tg" data-key="Telegrambot" data-example="7124836834">
+                <i class="fas fa-paper-plane"></i> /tg
+                <span class="example">✈️ 7124836834</span>
+            </div>
+            <div class="btn btn-pincode" data-key="Pinbot" data-example="110001">
+                <i class="fas fa-map-pin"></i> /pincode
+                <span class="example">📍 110001</span>
+            </div>
+            <div class="btn btn-email" data-key="Emailbot" data-example="user@gmail.com">
+                <i class="fas fa-envelope"></i> /email
+                <span class="example">✉️ user@gmail.com</span>
+            </div>
+            <div class="btn btn-pan" data-key="Pancardbot" data-example="ABCDE1234F">
+                <i class="fas fa-credit-card"></i> /pan
+                <span class="example">💳 ABCDE1234F</span>
+            </div>
+        </div>
+
+        <!-- INPUT -->
+        <div class="input-area">
+            <input type="text" id="queryInput" placeholder="Type any number / vehicle / email ..." />
+            <button id="fetchBtn"><i class="fas fa-bolt"></i> FETCH</button>
+        </div>
+
+        <!-- RESULT -->
+        <div class="result" id="resultBox">
+            <div class="label"><span>📡 output</span> <span id="statusBadge">● idle</span></div>
+            <span style="color:#4a4a6a;">⚡ click any colored button or type query &amp; press FETCH</span>
+            <span class="cursor"></span>
+        </div>
+
+        <!-- CREDIT -->
+        <div class="credit">
+            <i class="fas fa-code"></i> by <a href="#">@UnknownGuy9876</a> · channel <a href="#">@SGCodexs</a>
+        </div>
+    </div>
+
+    <script>
+        // ================================================
+        //  PARTICLE SYSTEM (floating dots)
+        // ================================================
+        (function particles() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            const particles = [];
+            const COUNT = 90;
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    this.r = Math.random() * 1.8 + 0.6;
+                    this.dx = (Math.random() - 0.5) * 0.25;
+                    this.dy = (Math.random() - 0.5) * 0.25;
+                    this.alpha = Math.random() * 0.5 + 0.2;
+                }
+                update() {
+                    this.x += this.dx;
+                    this.y += this.dy;
+                    if (this.x < 0 || this.x > w) this.dx *= -1;
+                    if (this.y < 0 || this.y > h) this.dy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0, 255, 195, ${this.alpha})`;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < COUNT; i++) particles.push(new Particle());
+
+            function animate() {
+                ctx.clearRect(0, 0, w, h);
+                for (let p of particles) {
+                    p.update();
+                    p.draw();
+                }
+                // draw faint lines between nearby particles
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 130) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(0, 255, 195, ${0.08 * (1 - dist / 130)})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        // ================================================
+        //  MAHABALI — CORE LOGIC
+        // ================================================
+
+        const API_BASE = "http://chances-fitness-profession-believes.trycloudflare.com/api/v1/info";
+        const resultBox = document.getElementById('resultBox');
+        const queryInput = document.getElementById('queryInput');
+        const fetchBtn = document.getElementById('fetchBtn');
+        const statusBadge = document.getElementById('statusBadge');
+
+        function setResult(text, isError = false) {
+            const label = resultBox.querySelector('.label');
+            resultBox.innerHTML = '';
+            resultBox.appendChild(label);
+            const div = document.createElement('div');
+            div.style.marginTop = '6px';
+            div.innerText = text;
+            if (isError) div.style.color = '#ff5e7c';
+            resultBox.appendChild(div);
+            // cursor at end
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            resultBox.appendChild(cursor);
+            statusBadge.textContent = isError ? '● error' : '● done';
+            statusBadge.style.color = isError ? '#ff5e7c' : '#00ffc3';
+        }
+
+        function setLoading() {
+            const label = resultBox.querySelector('.label');
+            resultBox.innerHTML = '';
+            resultBox.appendChild(label);
+            const div = document.createElement('div');
+            div.style.marginTop = '6px';
+            div.style.color = '#7a7aaa';
+            div.innerText = '⏳ fetching data ...';
+            resultBox.appendChild(div);
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            resultBox.appendChild(cursor);
+            statusBadge.textContent = '● loading';
+            statusBadge.style.color = '#f1c40f';
+        }
+
+        async function fetchData(key, query) {
+            if (!query || query.trim() === '') {
+                setResult('❌ Query cannot be empty.', true);
+                return;
+            }
+            setLoading();
+            const url = `${API_BASE}?key=${key}&query=${encodeURIComponent(query.trim())}`;
+            try {
+                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                if (res.status === 502 || res.status === 503) {
+                    setResult(`⚠️ Server Busy (${res.status}). Try again.`, true);
+                    return;
+                }
+                if (!res.ok) {
+                    setResult(`❌ HTTP Error ${res.status}`, true);
+                    return;
+                }
+                const raw = await res.text();
+                try {
+                    const parsed = JSON.parse(raw);
+                    const pretty = JSON.stringify(parsed, null, 2);
+                    setResult(`📄 ${key} result:\n\n${pretty}`);
+                } catch (_) {
+                    setResult(`📄 ${key} result:\n\n${raw}`);
+                }
+            } catch (err) {
+                setResult(`❌ Network error: ${err.message}`, true);
+            }
+        }
+
+        // ---- BUTTONS ----
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const key = this.dataset.key;
+                const example = this.dataset.example || '';
+                queryInput.value = example;
+                fetchData(key, example);
+            });
+        });
+
+        // ---- FETCH ----
+        fetchBtn.addEventListener('click', function() {
+            const raw = queryInput.value.trim();
+            if (!raw) {
+                setResult('❌ Please enter a query.', true);
+                return;
+            }
+            if (raw.startsWith('/')) {
+                const parts = raw.split(' ');
+                const cmd = parts[0].replace('/', '');
+                const rest = parts.slice(1).join(' ');
+                const map = {
+                    'num': 'Numberbot',
+                    'vehicle': 'Vehiclebot',
+                    'truecaller': 'Truecallerbot',
+                    'aadhar': 'Aadharbot',
+                    'ip': 'IPbot',
+                    'ifsc': 'IFSEbot',
+                    'tg': 'Telegrambot',
+                    'pincode': 'Pinbot',
+                    'email': 'Emailbot',
+                    'pan': 'Pancardbot'
+                };
+                const key = map[cmd.toLowerCase()];
+                if (key && rest) {
+                    fetchData(key, rest);
+                    return;
+                }
+            }
+            const firstKey = document.querySelector('.btn')?.dataset.key || 'Numberbot';
+            fetchData(firstKey, raw);
+        });
+
+        // ---- ENTER ----
+        queryInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') fetchBtn.click();
+        });
+
+        // set initial status
+        statusBadge.textContent = '● ready';
+        statusBadge.style.color = '#4a4a7a';
+    </script>
+</body>
+</html>
